@@ -2,33 +2,38 @@ package com.bezkoder.spring.jpa.postgresql.model;
 
 //import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tutorials")
+name = "pet_user"
 public class Tutorial {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  strategy = GenerationType.AUTO
   private long id;
 
-  @Column(name = "title")
+  name = "name", length = 500
   private String title;
 
-  @Column(name = "description")
-  private String description;
+  name = "date_of_birth",length= 10
+  private String dateOfBirth;
 
-  @Column(name = "published")
+  name = "password", length = 500
+  private String password;
+
+  name = "published"
   private boolean published;
 
   public Tutorial() {
 
   }
 
-  public Tutorial(String title, String description, boolean published) {
+  public Tutorial(String title, String dateOfBirth,String password, boolean published) {
     this.title = title;
-    this.description = description;
+    this.dateOfBirth = dateOfBirth;
     this.published = published;
+    this.password=password;
   }
 
   public long getId() {
@@ -43,12 +48,12 @@ public class Tutorial {
     this.title = title;
   }
 
-  public String getDescription() {
-    return description;
+  public String getDateOfBirth() {
+    return dateOfBirth;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setDateOfBirth(String dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
   }
 
   public boolean isPublished() {
@@ -59,9 +64,17 @@ public class Tutorial {
     this.published = isPublished;
   }
 
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
   @Override
   public String toString() {
-    return "Tutorial [id=" + id + ", title=" + title + ", desc=" + description + ", published=" + published + "]";
+    return "Tutorial [id=" + id + ", name=" + title + ", date of birth=" + dateOfBirth + ", published=" + published + "]";
   }
 
 }

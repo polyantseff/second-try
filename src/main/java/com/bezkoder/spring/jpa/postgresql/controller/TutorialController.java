@@ -1,5 +1,9 @@
 package com.bezkoder.spring.jpa.postgresql.controller;
 
+import com.bezkoder.spring.jpa.postgresql.integrations.PostgresqlHelper;
+
+import static com.bezkoder.spring.jpa.postgresql.Variables.vars;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,16 +25,37 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bezkoder.spring.jpa.postgresql.model.Tutorial;
 import com.bezkoder.spring.jpa.postgresql.repository.TutorialRepository;
 
-@CrossOrigin(origins = "http://localhost:8081")
+origins = "http://localhost:8081"
 @RestController
-@RequestMapping("/api")
+"/api"
 public class TutorialController {
+	String currentUser;
 
 	@Autowired
 	TutorialRepository tutorialRepository;
 
-	@GetMapping("/tutorials")
-	public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
+"/authorize"
+	public ResponseEntity<Tutorial> authorize(@RequestBody Tutorial tutorial) throws SQLException {
+		String userName=tutorial.getTitle();
+		PostgresqlHelper postgresqlHelper = new PostgresqlHelper();
+		String password=tutorial.getPassword();
+		String validPassword=postgresqlHelper.singleRowSearch(userName,"password","pet_user","name");
+		String foundId=postgresqlHelper.singleRowSearch(userName,"id","pet_user","name");
+		if (!password.equals(validPassword))
+		{
+			postgresqlHelper.close();
+			return new ResponseEntity<>(null,HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
+		}
+		else
+		{
+			postgresqlHelper.close();
+			vars.put("currentUser",foundId);
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+	}
+
+"/users"
+	public ResponseEntity<List<Tutorial» getAllTutorials(required = false String title) {
 		try {
 			List<Tutorial> tutorials = new ArrayList<Tutorial>();
 
@@ -49,8 +74,8 @@ public class TutorialController {
 		}
 	}
 
-	@GetMapping("/tutorials/{id}")
-	public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
+"/users/{id}"
+	public ResponseEntity<Tutorial> getTutorialById("id" long id) {
 		Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
 
 		if (tutorialData.isPresent()) {
@@ -60,65 +85,27 @@ public class TutorialController {
 		}
 	}
 
-	@PostMapping("/tutorials")
+"/users"
 	public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
-		try {
-			Tutorial _tutorial = tutorialRepository
-					.save(new Tutorial(tutorial.getTitle(), tutorial.getDescription(), false));
-			return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		if (vars.get("currentUser")==null)
+		{
+			return new ResponseEntity<>(null,HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
+		}
+// else
+		{
+			try {
+				Tutorial _tutorial = tutorialRepository
+						.save(new Tutorial(tutorial.getTitle(), tutorial.getDateOfBirth(), tutorial.getPassword(), false));
+				return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
+			} catch (Exception e) {
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		}
 	}
 
-	@PutMapping("/tutorials/{id}")
-	public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
+"/users/{id}"
+	public ResponseEntity<Tutorial> updateTutorial("id" long id, @RequestBody Tutorial tutorial) {
 		Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
 
 		if (tutorialData.isPresent()) {
-			Tutorial _tutorial = tutorialData.get();
-			_tutorial.setTitle(tutorial.getTitle());
-			_tutorial.setDescription(tutorial.getDescription());
-			_tutorial.setPublished(tutorial.isPublished());
-			return new ResponseEntity<>(tutorialRepository.save(_tutorial), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-
-	@DeleteMapping("/tutorials/{id}")
-	public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
-		try {
-			tutorialRepository.deleteById(id);
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@DeleteMapping("/tutorials")
-	public ResponseEntity<HttpStatus> deleteAllTutorials() {
-		try {
-			tutorialRepository.deleteAll();
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-	}
-
-	@GetMapping("/tutorials/published")
-	public ResponseEntity<List<Tutorial>> findByPublished() {
-		try {
-			List<Tutorial> tutorials = tutorialRepository.findByPublished(true);
-
-			if (tutorials.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-			return new ResponseEntity<>(tutorials, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-}
+			Tutorial _tutorial =
