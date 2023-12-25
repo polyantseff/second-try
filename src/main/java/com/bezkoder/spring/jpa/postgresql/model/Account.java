@@ -6,17 +6,17 @@ import java.math.BigDecimal;
 import javax.persistence.*;
 
 @Entity
-name = "account"
+@Table( name = "account")
 public class Account {
 
     @Id
-    strategy = GenerationType.AUTO
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    name = "user_id"
+    @Column( name = "user_id")
     private long userId;
 
-    name = "balance"
+    @Column(name = "balance")
     private BigDecimal balance;
 
     public Account() {

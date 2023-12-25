@@ -6,23 +6,23 @@ import java.time.LocalDate;
 import javax.persistence.*;
 
 @Entity
-name = "pet_user"
+@Table( name = "pet_user")
 public class Tutorial {
 
   @Id
-  strategy = GenerationType.AUTO
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
 
-  name = "name", length = 500
+  @Column( name = "name", length = 500)
   private String title;
 
-  name = "date_of_birth",length= 10
+  @Column (name = "date_of_birth",length= 10)
   private String dateOfBirth;
 
-  name = "password", length = 500
+  @Column (name = "password", length = 500)
   private String password;
 
-  name = "published"
+  @Column (name = "published")
   private boolean published;
 
   public Tutorial() {

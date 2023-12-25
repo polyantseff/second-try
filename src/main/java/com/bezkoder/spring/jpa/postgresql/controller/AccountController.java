@@ -14,16 +14,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-origins = "http://localhost:8081"
+@CrossOrigin (origins ="http://localhost:8081")
 @RestController
-"/api"
+@RequestMapping("/api")
 public class AccountController {
 
     @Autowired
     AccountRepository accountRepository;
 
-"/account/{userId}"
-    public ResponseEntity<Account> getAccountlByUserId("userId" long id) {
+@GetMapping("/account/{userId}")
+    public ResponseEntity<Account> getAccountlByUserId(@PathVariable("userId") long id) {
 // Optional<Account> accountData = AccountRepository.findById(id);
         if (vars.get("currentUser")==null)
         {
