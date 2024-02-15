@@ -1,5 +1,6 @@
 package com.bezkoder.spring.jpa.postgresql.integrations;
 
+import static com.bezkoder.spring.jpa.postgresql.Variables.vars;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.bezkoder.spring.jpa.postgresql.configs.ConfProperties;
@@ -22,10 +23,15 @@ public class PostgresqlHelper {
             this.password = ConfProperties.getProperty("db.password");
         }
         connection = DriverManager.getConnection(url, username, password);
+        renewStatement();
+    }
+
+    private void renewStatement() throws SQLException {
         statement = connection.createStatement();
     }
 
     public ResultSet executeQuery(String sqlRequest) throws SQLException {
+        statement.executeQuery("deallocate \"S_1\";");
         return statement.executeQuery(sqlRequest);
     }
 
@@ -34,26 +40,56 @@ public class PostgresqlHelper {
         connection.close();
     }
 
-// public void externalTaskContainsExternalId(String externalId) throws SQLException, ClassNotFoundException {
-// ResultSet resultSet = statement.executeQuery("SELECT * FROM adju.external_task");
-// boolean isContainsExternalId = false;
-// while (resultSet.next()) {
-// if (resultSet.getString("external_id").equals(externalId)) {
-// isContainsExternalId = true;
-// vars.put("taskId", resultSet.getString("inner_id"));
-// }
-// }
-// assertTrue(isContainsExternalId, "Таблица external_task не содержит задачи с данным externalId");
-// }
+//    public void externalTaskContainsExternalId(String externalId) throws SQLException, ClassNotFoundException {
+//        ResultSet resultSet = statement.executeQuery("SELECT * FROM adju.external_task");
+//        boolean isContainsExternalId = false;
+//        while (resultSet.next()) {
+//            if (resultSet.getString("external_id").equals(externalId)) {
+//                isContainsExternalId = true;
+//                vars.put("taskId", resultSet.getString("inner_id"));
+//            }
+//        }
+//        assertTrue(isContainsExternalId, "Таблица external_task не содержит задачи с данным externalId");
+//    }
 
     /**
      * Метод ищет значение колонки по значению другой или той же колонке в указанной таблице, предполагается что значение единственное
      */
     public String singleRowSearch(String searchId,String entityColumn,String tableName,String searchColumn) throws SQLException {
-        ResultSet resultSet = statement.executeQuery("SELECT "+entityColumn+" FROM pet."+tableName+" where "+searchColumn+"='"+searchId+"'");
+        ResultSet resultSet;
+        try
+        {
+            resultSet = statement.executeQuery("SELECT " + entityColumn + " FROM pet." + tableName + " where " + searchColumn + "='" + searchId + "'");
+        }
+        catch (PSQLException p)
+        {
+           renewStatement();
+           resultSet = statement.executeQuery("SELECT " + entityColumn + " FROM pet." + tableName + " where " + searchColumn + "='" + searchId + "'");
+        }
         resultSet.next();
-        String temp=resultSet.getString(1);
-        return temp;
+        try
+        {
+            String temp = resultSet.getString(1);
+            return temp;
+        }
+        catch (PSQLException p)
+        {
+            return "0";
+        }
+    }
+
+    public String singleRowSearchForCurrentUser(String searchId,String entityColumn,String tableName,String searchColumn) throws SQLException {
+        ResultSet resultSet = statement.executeQuery("SELECT "+entityColumn+" FROM pet."+tableName+" where "+searchColumn+"='"+searchId+"' and user_id="+vars.get("currentUser"));
+        resultSet.next();
+        try
+        {
+            String temp = resultSet.getString(1);
+            return temp;
+        }
+        catch (PSQLException p)
+        {
+            return "0";
+        }
     }
 
     public String singleRowSearchLike(String searchId,String entityColumn,String tableName,String searchColumn,String addtitional) throws SQLException {
@@ -65,8 +101,8 @@ public class PostgresqlHelper {
         }
         ResultSet resultSet = pstmt.executeQuery();
         resultSet.next();
-        String temp = resultSet.getString(1);
-        return temp;
+            String temp = resultSet.getString(1);
+            return temp;
     }
 
     public String singleRowSearchLike(String searchId,String entityColumn,String tableName,String searchColumn) throws SQLException {
@@ -92,21 +128,27 @@ public class PostgresqlHelper {
         return false;
     }
 
-// public void insertIntoWorkGroup(String id,String name,String rawData,String searchableIndex,String fullName) throws SQLException
-// {
-// try
-// {
-// ResultSet resultSet = statement.executeQuery("INSERT INTO adju." + workGroup + workGroupTableStructure +
-// "VALUES ('" + id + "','" + name + "',13,true,'84001','2022-12-06 12:19:37.205532','" + rawData + "','"
-// + searchableIndex + "','" + fullName + "')");
-// resultSet.close();
-// }
-// catch (PSQLException p) {}
-// findEntry(workGroup,"id",id);
-// }
+//    public void insertIntoWorkGroup(String id,String name,String  rawData,String searchableIndex,String fullName) throws SQLException
+//    {
+//        try
+//        {
+//            ResultSet resultSet = statement.executeQuery("INSERT INTO adju." + workGroup + workGroupTableStructure +
+//                    "VALUES ('" + id + "','" + name + "',13,true,'84001','2022-12-06 12:19:37.205532','" + rawData + "','"
+//                    + searchableIndex + "','" + fullName + "')");
+//            resultSet.close();
+//        }
+//        catch (PSQLException p) {}
+//        findEntry(workGroup,"id",id);
+//    }
 //
-// public void insertIntoWorkGroupMember(String groupId,String userId) throws SQLException {
-// try
-// {
-// ResultSet resultSet = statement.executeQuery("INSERT INTO adju." + workGroupMember + workGroupMemberTableStructure +
-//
+//    public void insertIntoWorkGroupMember(String groupId,String userId) throws SQLException {
+//        try
+//        {
+//            ResultSet resultSet = statement.executeQuery("INSERT INTO adju." + workGroupMember + workGroupMemberTableStructure +
+//                    "VALUES ('" + groupId + "','" + userId + "',true)");
+//            resultSet.close();
+//        }
+//        catch (PSQLException p) {}
+//        findEntry(workGroupMember,"group_id",groupId);
+//    }
+}

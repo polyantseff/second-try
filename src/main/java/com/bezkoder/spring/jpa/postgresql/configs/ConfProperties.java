@@ -10,11 +10,11 @@ public class ConfProperties {
     protected static Properties properties;
 
     static {
-// if (stand == null) {
-// stand = defaultStand;
-//// stand=dev;
-//// stand=ift;
-// }
+//        if (stand == null) {
+//            stand = defaultStand;
+////            stand=dev;
+////            stand=ift;
+//        }
         try {
             fileInputStream = new FileInputStream("src/main/resources/further.properties");
             properties = new Properties();
@@ -35,3 +35,4 @@ public class ConfProperties {
         return properties.getProperty(key);
     }
 }
+
