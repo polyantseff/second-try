@@ -1,6 +1,6 @@
 package com.bezkoder.spring.jpa.postgresql.integrations;
 
-import static com.bezkoder.spring.jpa.postgresql.Variables.vars;
+import static com.bezkoder.spring.jpa.postgresql.Variables.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.bezkoder.spring.jpa.postgresql.configs.ConfProperties;
@@ -59,12 +59,12 @@ public class PostgresqlHelper {
         ResultSet resultSet;
         try
         {
-            resultSet = statement.executeQuery("SELECT " + entityColumn + " FROM pet." + tableName + " where " + searchColumn + "='" + searchId + "'");
+            resultSet = statement.executeQuery("SELECT " + entityColumn + " FROM "+schema+"." + tableName + " where " + searchColumn + "='" + searchId + "'");
         }
         catch (PSQLException p)
         {
            renewStatement();
-           resultSet = statement.executeQuery("SELECT " + entityColumn + " FROM pet." + tableName + " where " + searchColumn + "='" + searchId + "'");
+           resultSet = statement.executeQuery("SELECT " + entityColumn + " FROM "+schema+"." + tableName + " where " + searchColumn + "='" + searchId + "'");
         }
         resultSet.next();
         try
@@ -79,7 +79,7 @@ public class PostgresqlHelper {
     }
 
     public String singleRowSearchForCurrentUser(String searchId,String entityColumn,String tableName,String searchColumn) throws SQLException {
-        ResultSet resultSet = statement.executeQuery("SELECT "+entityColumn+" FROM pet."+tableName+" where "+searchColumn+"='"+searchId+"' and user_id="+vars.get("currentUser"));
+        ResultSet resultSet = statement.executeQuery("SELECT "+entityColumn+" FROM "+schema+"." + tableName+" where "+searchColumn+"='"+searchId+"' and user_id="+vars.get("currentUser"));
         resultSet.next();
         try
         {
@@ -93,7 +93,7 @@ public class PostgresqlHelper {
     }
 
     public String singleRowSearchLike(String searchId,String entityColumn,String tableName,String searchColumn,String addtitional) throws SQLException {
-        PreparedStatement pstmt = connection.prepareStatement("SELECT "+entityColumn+" FROM pet."+tableName+" where "+searchColumn+" like'%"+searchId+"%'"+addtitional);
+        PreparedStatement pstmt = connection.prepareStatement("SELECT "+entityColumn+" FROM "+schema+"." + tableName+" where "+searchColumn+" like'%"+searchId+"%'"+addtitional);
         try {
             TimeUnit.MINUTES.sleep(1);
         } catch (InterruptedException e) {
@@ -116,7 +116,7 @@ public class PostgresqlHelper {
 
     public boolean findEntryB(String table, String column, String entry ) throws SQLException
     {
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM pet." + table);
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM "+schema+"." + table);
         while (resultSet.next()) {
             if (resultSet.getString(column).equals(entry))
             {
@@ -127,6 +127,20 @@ public class PostgresqlHelper {
         resultSet.close();
         return false;
     }
+
+    public boolean isEnvironmentEmpty() throws SQLException
+    {
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM "+schema+"." + petUser);
+        if (resultSet.next())
+        {
+            resultSet.close();
+            return false;
+        }
+        resultSet.close();
+        return true;
+    }
+
+
 
 //    public void insertIntoWorkGroup(String id,String name,String  rawData,String searchableIndex,String fullName) throws SQLException
 //    {

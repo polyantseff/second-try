@@ -2,16 +2,27 @@ package com.bezkoder.spring.jpa.postgresql.methods;
 
 import static com.bezkoder.spring.jpa.postgresql.methods.Methods.UseRestService;
 
+import com.bezkoder.spring.jpa.postgresql.integrations.PostgresqlHelper;
 import com.bezkoder.spring.jpa.postgresql.methods.Methods.RequestType;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class CustomTask extends TimerTask {
+  PostgresqlHelper postgresqlHelper=new PostgresqlHelper();
 
   public CustomTask()
   {
+    try {
+      if (postgresqlHelper.isEnvironmentEmpty())
+      {
+        System.out.println("");
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
     JSONArray jsonArray=new JSONArray(UseRestService("/api/accounts"));
     for (int i=0;i<jsonArray.length();i++)
     {
