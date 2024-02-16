@@ -10,4 +10,6 @@ public class Variables {
   public static final String account="account";
   public static final String emailData="email_data";
   public static final String petUserFields="(id,date_of_birth,email_list,password,name)";
+  public static final String emailFields="(id,email,user_id)";
+  public static final String accountFields="(id,balance,user_id)";
 }

@@ -143,23 +143,67 @@ public class PostgresqlHelper {
 
     public void PreFill()
     {
-        try {
-            PreFillUser(petUser,petUserFields,"751","1985-01-01","test","Testov");
-            PreFillUser(petUser,petUserFields,"1","2000-02-01","test","Testov");
-            PreFillUser(petUser,petUserFields,"401","1900-12-12","test","TestCreate");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+            PreFillUser("751","1985-01-01","test","Testov");
+            PreFillUser("1","2000-02-01","test","Testov");
+            PreFillUser("401","1900-12-12","test","TestCreate");
+            PreFillEmailData("2","test@mail.ru","1");
+            PreFillEmailData("451","UPP@test.cz","401");
+            PreFillEmailData("551","another@test.cz","401");
+            PreFillAccount("3","0","401");
+            PreFillAccount("1","1000","751");
+            PreFillAccount("2","100","1");
     }
-    public void PreFillUser(String tableName,String tableFields,String id,String date,String password,String name) throws SQLException
+    public void PreFillTable(String tableName,String userQuery,String id) throws SQLException
     {
         try
         {
-            ResultSet resultSet = statement.executeQuery("INSERT INTO " +schema+"."+tableName+tableFields+" VALUES ('"+id+"','"+date+"',null,'"+password+"','"+name+"')");
+            ResultSet resultSet = statement.executeQuery(userQuery);
             resultSet.close();
         }
         catch (PSQLException p) {}
         findEntry(tableName,"id",id);
+    }
+
+    public void PreFillUser(String id,String date,String password,String name)
+    {
+        try {
+            PreFillTable(petUser,UserQuery(id,date,password,name),id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void PreFillAccount(String id,String balance,String userId)
+    {
+        try {
+            PreFillTable(account,AccountQuery(id,balance,userId),id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void PreFillEmailData(String id,String email,String userId)
+    {
+        try {
+            PreFillTable(emailData,EmailQuery(id,email,userId),id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String UserQuery(String id,String date,String password,String name)
+    {
+        return "INSERT INTO " +schema+"."+petUser +petUserFields+" VALUES ('"+id+"','"+date+"',null,'"+password+"','"+name+"')";
+    }
+
+    public String AccountQuery(String id,String balance,String userId)
+    {
+        return "INSERT INTO " +schema+"."+account +accountFields+" VALUES ('"+id+"','"+balance+"','"+userId+"')";
+    }
+
+    public String EmailQuery(String id,String email,String userId)
+    {
+        return "INSERT INTO " +schema+"."+emailData +emailFields+" VALUES ('"+id+"','"+email+"','"+userId+"')";
     }
 //
 //    public void insertIntoWorkGroupMember(String groupId,String userId) throws SQLException {
