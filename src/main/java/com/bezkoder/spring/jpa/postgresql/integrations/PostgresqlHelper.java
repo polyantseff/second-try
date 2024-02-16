@@ -141,18 +141,25 @@ public class PostgresqlHelper {
     }
 
 
-
-    public void PreFill() throws SQLException
+    public void PreFill()
+    {
+        try {
+            PreFillUser(petUser,petUserFields,"751","1985-01-01","test","Testov");
+            PreFillUser(petUser,petUserFields,"1","2000-02-01","test","Testov");
+            PreFillUser(petUser,petUserFields,"401","1900-12-12","test","TestCreate");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void PreFillUser(String tableName,String tableFields,String id,String date,String password,String name) throws SQLException
     {
         try
         {
-            ResultSet resultSet = statement.executeQuery("INSERT INTO " +schema+".pet_user (id,date_of_birth,email_list,password,name)" +
-                    "VALUES ('1','2000-02-01',null,'honey','Медоэв')";
-            );
+            ResultSet resultSet = statement.executeQuery("INSERT INTO " +schema+"."+tableName+tableFields+" VALUES ('"+id+"','"+date+"',null,'"+password+"','"+name+"')");
             resultSet.close();
         }
         catch (PSQLException p) {}
-        findEntry("pet_user","id","1");
+        findEntry(tableName,"id",id);
     }
 //
 //    public void insertIntoWorkGroupMember(String groupId,String userId) throws SQLException {
