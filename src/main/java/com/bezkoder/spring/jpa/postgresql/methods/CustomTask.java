@@ -18,6 +18,7 @@ public class CustomTask extends TimerTask {
     try {
       if (postgresqlHelper.isEnvironmentEmpty())
       {
+        postgresqlHelper.PreFill();
         System.out.println("");
       }
     } catch (SQLException e) {

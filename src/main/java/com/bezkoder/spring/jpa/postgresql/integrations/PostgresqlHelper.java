@@ -142,18 +142,18 @@ public class PostgresqlHelper {
 
 
 
-//    public void insertIntoWorkGroup(String id,String name,String  rawData,String searchableIndex,String fullName) throws SQLException
-//    {
-//        try
-//        {
-//            ResultSet resultSet = statement.executeQuery("INSERT INTO adju." + workGroup + workGroupTableStructure +
-//                    "VALUES ('" + id + "','" + name + "',13,true,'84001','2022-12-06 12:19:37.205532','" + rawData + "','"
-//                    + searchableIndex + "','" + fullName + "')");
-//            resultSet.close();
-//        }
-//        catch (PSQLException p) {}
-//        findEntry(workGroup,"id",id);
-//    }
+    public void PreFill() throws SQLException
+    {
+        try
+        {
+            ResultSet resultSet = statement.executeQuery("INSERT INTO " +schema+".pet_user (id,date_of_birth,email_list,password,name)" +
+                    "VALUES ('1','2000-02-01',null,'honey','Медоэв')";
+            );
+            resultSet.close();
+        }
+        catch (PSQLException p) {}
+        findEntry("pet_user","id","1");
+    }
 //
 //    public void insertIntoWorkGroupMember(String groupId,String userId) throws SQLException {
 //        try
