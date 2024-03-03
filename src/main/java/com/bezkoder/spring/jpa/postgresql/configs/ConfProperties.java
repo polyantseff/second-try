@@ -6,31 +6,18 @@ import java.util.Properties;
 
 public class ConfProperties {
 
-    // protected static FileInputStream fileInputStream;
     protected static Properties properties;
 
-    static {
-// if (stand == null) {
-// stand = defaultStand;
-//// stand=dev;
-//// stand=ift;
-// }
+    /**Конструкция try with resources*/
+    static
+    {
         try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/further.properties"))
         {
-// fileInputStream = new FileInputStream("src/main/resources/further.properties");
             properties = new Properties();
             properties.load(fileInputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
-// finally {
-// if (fileInputStream != null)
-// try {
-// fileInputStream.close();
-// } catch (IOException e) {
-// e.printStackTrace();
-// }
-// }
     }
 
     public static String getProperty(String key) {
