@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins = "http://localhost:8081")
 @CrossOrigin(origins = localhost)
 @RestController
 @RequestMapping("/api")
@@ -31,27 +30,6 @@ public class EmailController extends Controller{
 	{
 		return getDataResponseEntity(getUserIdByEmail(email),EmailData.class);
 	}
-
-
-//	@GetMapping("/email/{userId}")
-//	public ResponseEntity<EmailData> getEmailByUserId(@PathVariable("userId") long id) {
-//		try {
-//			List<EmailData> dataList = new ArrayList<EmailData>();
-//
-////			if (title == null)
-////				tutorialRepository.findAll().forEach(tutorials::add);
-////			else
-//				emailRepository.findByUserId(id).forEach(dataList::add);
-//
-//			if (dataList.isEmpty()) {
-//				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//			}
-//
-//			return new ResponseEntity(dataList, HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
 
 	@PostMapping("/email")
 	public ResponseEntity<EmailData> createEmail(@RequestBody EmailData emailData) {
@@ -146,62 +124,4 @@ public class EmailController extends Controller{
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
-//	@SneakyThrows
-//	public long getEmailIdByUserId(long id)
-//	{
-//		String emailDataId= postgresqlHelper.singleRowSearch(String.valueOf(id),"id","email_data","user_id");
-//		return Long.parseLong(emailDataId);
-//	}
-
-//	@PutMapping("/users/{id}")
-//	public ResponseEntity<Tutorial> updateTutorial(@PathVariable("id") long id, @RequestBody Tutorial tutorial) {
-//		Optional<Tutorial> tutorialData = tutorialRepository.findById(id);
-//
-//		if (tutorialData.isPresent()) {
-//			Tutorial _tutorial = tutorialData.get();
-//			_tutorial.setTitle(tutorial.getTitle());
-//			_tutorial.setDateOfBirth(tutorial.getDateOfBirth());
-//			_tutorial.setPublished(tutorial.isPublished());
-//			return new ResponseEntity<>(tutorialRepository.save(_tutorial), HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//	}
-//
-//	@DeleteMapping("/users/{id}")
-//	public ResponseEntity<HttpStatus> deleteTutorial(@PathVariable("id") long id) {
-//		try {
-//			tutorialRepository.deleteById(id);
-//			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
-//
-//	@DeleteMapping("/users")
-//	public ResponseEntity<HttpStatus> deleteAllTutorials() {
-//		try {
-//			tutorialRepository.deleteAll();
-//			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//
-//	}
-//
-//	@GetMapping("/users/published")
-//	public ResponseEntity<List<Tutorial>> findByPublished() {
-//		try {
-//			List<Tutorial> tutorials = tutorialRepository.findByPublished(true);
-//
-//			if (tutorials.isEmpty()) {
-//				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//			}
-//			return new ResponseEntity<>(tutorials, HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
-
 }

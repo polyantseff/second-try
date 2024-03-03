@@ -39,7 +39,6 @@ public class Controller {
 	}
 
 	protected ResponseEntity getDataResponseEntity(long id,Class<?> c) {
-		//		Optional<Account> accountData = AccountRepository.findById(id);
 		if (vars.get("currentUser")==null)
 		{
 			return new ResponseEntity<>(null, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);

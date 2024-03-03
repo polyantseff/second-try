@@ -40,18 +40,6 @@ public class PostgresqlHelper {
         connection.close();
     }
 
-//    public void externalTaskContainsExternalId(String externalId) throws SQLException, ClassNotFoundException {
-//        ResultSet resultSet = statement.executeQuery("SELECT * FROM adju.external_task");
-//        boolean isContainsExternalId = false;
-//        while (resultSet.next()) {
-//            if (resultSet.getString("external_id").equals(externalId)) {
-//                isContainsExternalId = true;
-//                vars.put("taskId", resultSet.getString("inner_id"));
-//            }
-//        }
-//        assertTrue(isContainsExternalId, "Таблица external_task не содержит задачи с данным externalId");
-//    }
-
     /**
      * Метод ищет значение колонки по значению другой или той же колонке в указанной таблице, предполагается что значение единственное
      */
@@ -205,15 +193,4 @@ public class PostgresqlHelper {
     {
         return "INSERT INTO " +schema+"."+emailData +emailFields+" VALUES ('"+id+"','"+email+"','"+userId+"')";
     }
-//
-//    public void insertIntoWorkGroupMember(String groupId,String userId) throws SQLException {
-//        try
-//        {
-//            ResultSet resultSet = statement.executeQuery("INSERT INTO adju." + workGroupMember + workGroupMemberTableStructure +
-//                    "VALUES ('" + groupId + "','" + userId + "',true)");
-//            resultSet.close();
-//        }
-//        catch (PSQLException p) {}
-//        findEntry(workGroupMember,"group_id",groupId);
-//    }
 }
