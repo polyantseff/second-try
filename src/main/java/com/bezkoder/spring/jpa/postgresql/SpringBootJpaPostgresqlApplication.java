@@ -7,19 +7,24 @@ import java.util.concurrent.TimeUnit;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
+@Configuration
+@EnableScheduling
 @SpringBootApplication
 public class SpringBootJpaPostgresqlApplication {
 
+	static CustomTask customTask;
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootJpaPostgresqlApplication.class, args);
-		runTask();
+		customTask=new CustomTask();
 	}
 
+	@Scheduled(fixedDelay = 30000,initialDelay = 30000)
 	public static void runTask() {
-		Calendar calendar = Calendar.getInstance();
-		Timer time = new Timer(); // Instantiate Timer Object
-		time.schedule(new CustomTask(), calendar.getTime(), TimeUnit.SECONDS.toMillis(30));
+		customTask.run();
 	}
 }
