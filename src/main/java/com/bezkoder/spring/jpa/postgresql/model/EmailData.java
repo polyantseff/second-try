@@ -1,8 +1,5 @@
 package com.bezkoder.spring.jpa.postgresql.model;
 
-//import jakarta.persistence.*;
-
-import java.math.BigDecimal;
 import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +12,10 @@ public class EmailData {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
   @Column(name = "user_id")
-  private long userId;
+  private Long userId;
 
   @Column(name = "email")
   private String email;
@@ -27,17 +24,10 @@ public class EmailData {
 
   }
 
-  public EmailData(String email, long userId) {
+  public EmailData(String email, Long userId) {
     this.email = email;
     this.userId=userId;
   }
-
-//  public EmailData(long userId,String email) {
-//    this.userId= userId;
-//    this.email = email;
-//  }
-
-
 
   @Override
   public String toString() {

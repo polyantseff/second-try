@@ -15,10 +15,10 @@ public class Account {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
   @Column(name = "user_id")
-  private long userId;
+  private Long userId;
 
   @Column(name = "balance")
   private BigDecimal balance;
@@ -27,7 +27,7 @@ public class Account {
 
   }
 
-  public Account(long userId,BigDecimal balance) {
+  public Account(Long userId,BigDecimal balance) {
     this.userId= userId;
     this.balance = balance;
   }
@@ -42,7 +42,7 @@ public class Account {
 
   public synchronized void increaseBalance(BigDecimal increment)
   {
-    this.balance= BigDecimal.valueOf(getBalance().doubleValue()+increment.doubleValue());
+    setBalance(this.balance.add(increment));
   }
 
   @Override

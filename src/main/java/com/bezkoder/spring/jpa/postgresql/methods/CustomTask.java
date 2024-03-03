@@ -5,6 +5,7 @@ import static com.bezkoder.spring.jpa.postgresql.methods.Methods.UseRestService;
 import com.bezkoder.spring.jpa.postgresql.integrations.PostgresqlHelper;
 import com.bezkoder.spring.jpa.postgresql.methods.Methods.RequestType;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.*;
 import org.json.JSONArray;
@@ -43,10 +44,11 @@ public class CustomTask extends TimerTask {
   {
     for (Map.Entry<Integer, BigDecimal> entry : accountCurrentBalance.entrySet())
     {
-      if ((entry.getValue().doubleValue()) < (accountInitialBalance.get(entry.getKey()).doubleValue() * 207 / 110)) {
-        Double currentBalanceD = entry.getValue().doubleValue() * 1.1;
-        entry.setValue(BigDecimal.valueOf(currentBalanceD));
-        BigDecimal increment=BigDecimal.valueOf(entry.getValue().doubleValue()/11);
+      if (entry.getValue().compareTo(accountInitialBalance.get(entry.getKey()).multiply(BigDecimal.valueOf(207)).divide(BigDecimal.valueOf(110),2, RoundingMode.HALF_UP))<1 )
+      {
+        BigDecimal currentBalance = entry.getValue().multiply(BigDecimal.valueOf(1.1));
+        entry.setValue(currentBalance);
+        BigDecimal increment=entry.getValue().divide(BigDecimal.valueOf(11),5,RoundingMode.HALF_UP);
         UseRestService("/api/account/" + entry.getKey(), RequestType.PUT, "{\"balance\":" + increment + "}");
       }
     }

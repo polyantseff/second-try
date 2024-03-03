@@ -16,7 +16,7 @@ public class Tutorial {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
   @Column(name = "name", length = 500)
   private String title;
@@ -39,7 +39,7 @@ public class Tutorial {
     this.password=password;
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
