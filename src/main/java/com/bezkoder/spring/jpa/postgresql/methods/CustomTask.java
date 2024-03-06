@@ -44,7 +44,7 @@ public class CustomTask extends TimerTask {
   {
     for (Map.Entry<Integer, BigDecimal> entry : accountCurrentBalance.entrySet())
     {
-      if (entry.getValue().compareTo(accountInitialBalance.get(entry.getKey()).multiply(BigDecimal.valueOf(207)).divide(BigDecimal.valueOf(110),2, RoundingMode.HALF_UP))<1 )
+      if (entry.getValue().compareTo(accountInitialBalance.get(entry.getKey()).multiply(BigDecimal.valueOf(207)).divide(BigDecimal.valueOf(110),2, RoundingMode.HALF_UP))<1 && (!(accountInitialBalance.get(entry.getKey()).compareTo(BigDecimal.valueOf(0))==0)))
       {
         BigDecimal currentBalance = entry.getValue().multiply(BigDecimal.valueOf(1.1));
         entry.setValue(currentBalance);
