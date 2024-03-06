@@ -41,7 +41,7 @@ public class TutorialController{
 
 	@Autowired
 	TutorialRepository tutorialRepository;
-	TutorialService tutorialService;
+	TutorialService tutorialService=new TutorialService(tutorialRepository);
 
 
 	@PostMapping("/authorize")
