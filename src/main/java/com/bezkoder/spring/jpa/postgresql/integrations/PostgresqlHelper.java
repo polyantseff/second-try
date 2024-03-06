@@ -131,9 +131,9 @@ public class PostgresqlHelper {
 
     public void PreFill()
     {
-            PreFillUser("751","1985-01-01","test","Testov");
-            PreFillUser("1","2000-02-01","test","Testov");
-            PreFillUser("401","1900-12-12","test","TestCreate");
+            PreFillUser("751","1985-01-01","IHmSDoqmBe8=","Testov");
+            PreFillUser("1","2000-02-01","IHmSDoqmBe8=","Медоэв");
+            PreFillUser("401","1900-12-12","IHmSDoqmBe8=","TestCreate");
             PreFillEmailData("2","test@mail.ru","1");
             PreFillEmailData("451","UPP@test.cz","401");
             PreFillEmailData("551","another@test.cz","401");

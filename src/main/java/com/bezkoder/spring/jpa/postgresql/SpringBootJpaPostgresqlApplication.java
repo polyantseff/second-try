@@ -18,7 +18,7 @@ public class SpringBootJpaPostgresqlApplication {
 		customTask=new CustomTask();
 	}
 
-	@Scheduled(fixedDelay = 30000,initialDelay = 1000)
+	@Scheduled(fixedDelay = 30000,initialDelay = 5000)
 	public static void runTask() {
 		customTask.run();
 	}

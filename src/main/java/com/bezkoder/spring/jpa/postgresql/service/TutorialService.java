@@ -7,6 +7,7 @@ import static com.bezkoder.spring.jpa.postgresql.methods.Methods.isSubstring;
 
 import com.bezkoder.spring.jpa.postgresql.integrations.PostgresqlHelper;
 import com.bezkoder.spring.jpa.postgresql.methods.PageRequestModified;
+import com.bezkoder.spring.jpa.postgresql.methods.TrippleDes;
 import com.bezkoder.spring.jpa.postgresql.model.Tutorial;
 import com.bezkoder.spring.jpa.postgresql.repository.TutorialRepository;
 
@@ -197,7 +198,14 @@ public class TutorialService implements TutorialRepository {
     String password= tutorial.getPassword();
     String validPassword=postgresqlHelper.singleRowSearch(userName,"password","pet_user","name");
     String foundId=postgresqlHelper.singleRowSearch(userName,"id","pet_user","name");
-    if (!password.equals(validPassword))
+    TrippleDes trippleDes=null;
+    try {
+      trippleDes=new TrippleDes();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    String encryptedPassword=trippleDes.encrypt(password);
+    if (!encryptedPassword.equals(validPassword))
     {
       postgresqlHelper.close();
       return new ResponseEntity<>(null, HttpStatus.NETWORK_AUTHENTICATION_REQUIRED);
